@@ -1,0 +1,82 @@
+body {
+    font: 300 16px/22px "Lato", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    background-color: #3a3a38;
+    color: 
+}
+
+h1 {
+    border: 1px solid  green;
+    margin: 20px auto;
+    padding-top: 22px;
+    text-align: center;
+    height: 100px; 
+    background-color: #af3625;
+    color: #f3ebd8;
+}
+
+#main {
+    width: 980px;
+    border-radius: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #f3ebd8;
+    min-height: 200px;
+    padding-bottom: 15px;
+    padding-top: 40px;
+}
+
+h3 {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+ul {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+li {
+    list-style: none;
+    margin-bottom: 30px;
+    font-size: 18px;
+}
+
+p {
+    font-size: 22px;
+    margin-left: 30px;
+    font-weight: 400;
+    margin-top: 30px;
+
+}
+
+input {
+    display: inline-block;
+    border: 1px solid  green;
+    margin-right: 5px;
+    margin-left: 30px;
+    
+}
+
+button {
+    display: block;
+    border-radius: 8px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 200px;
+    height: 50px;
+    font-size: 25px;
+    background-color: #242422;
+    color: #f3ebd8;
+    margin-top: 25px;
+}
+
+h4 {
+    border-radius: 8px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
