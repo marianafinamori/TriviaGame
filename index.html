@@ -10,17 +10,18 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:100,300,400">
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 </head>
-<body>
+<body onload="createStart()">
 
-    <h1>TRIVIA GAME</h1>
+    <h1 class="header">TRIVIA GAME</h1>
    
 
-    <div id="main">
+    <div id="main" class="container">
         <h3 id="clock"></h3>
-        <form id="quizz"></form>
-        <div id="button-container"></div>
-        <div id="button2-container"></div>
-        <div id="results"></div>
+        <div id="quizz" class="container"></div>
+        <div id="btn-start-container"></div>
+        <div id="btn-done-container"></div>
+        <div id="results" class="container"></div>
+        <div id="btn-startover-container"></div>
     </div>    
            
 <script src="assets/javascript/app.js"></script>

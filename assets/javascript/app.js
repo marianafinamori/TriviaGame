@@ -1,147 +1,221 @@
-var time = 25;
-var minutes;
-var seconds;
-var intervalId;
-var btn;
-var btn2;
-var correct = 0;
-var incorrect = 0;
-var unanswered = 0;
+let time = 20;
+let minutes;
+let seconds;
+let intervalId;
+let btnStart;
+let btnDone;
+let btnStartOver;
+let choiceVariable;
+let pack;
+let correct = 0;
+let incorrect = 0;
+let unanswered = 0;
+let answered = 0;
 
- var questions = [
-     {question: "Name Andy Warhol's New York City studio",
-    options: ["Brillo", "Factory", "Superstar", "Eddie", "Chelsea"],
+
+ const options = [
+     {question: "What was the name of Andy Warhol's studio?",
+    choices: ["Brillo", "Factory", "Superstar", "Eddie", "Chelsea"],
     answer: "Factory"},
 
     {question: "In which city is Alexander Platz located?",
-    options: ["Amsterdam", "Zurich", "Leipzig", "Salzberg", "Berlin"],
+    choices: ["Amsterdam", "Zurich", "Leipzig", "Salzberg", "Berlin"],
     answer: "Berlin"},
 
     {question: "In which city was Pablo Picasso born?",
-    options: ["Barcelona", "Madrid", "Málaga", "Bilbao", "Valencia"],
+    choices: ["Barcelona", "Madrid", "Málaga", "Bilbao", "Valencia"],
     answer: "Málaga"},
 
     {question: 'What is LEGO origin?',
-    options: ["Sweden", "Norway", "England", "Denmark", "Netherlands"],
-    answer: "Denmark"}
+    choices: ["Sweden", "Norway", "England", "Denmark", "Netherlands"],
+    answer: "Denmark"},
+
+    {question: "Which architect designed the Guggeinheim Museum in New York?",
+    choices: ["Frank Gehry", "Frank Lloyd Wright", "Renzo Piano", "Phillip Johnson", "Le Corbusier"],
+    answer: "Frank Lloyd Wright"}
+
 ];
 
-    window.onload = function() {
-        //Create a button START
-        btn = document.createElement('button');
-        //Show button on screen
-        btn.innerHTML = "Start";
-        $("#button-container").append(btn);
-        //Add event listener "CLICK" to the button and run a function
-        btn.addEventListener ('click', function start() {
-            //Start the timer
-            intervalId = setInterval(countDown, 1000);
-            //Through the array, for each object
-            for (var i=0; i <questions.length; i++) {
-                //Create <p> tag to hold the questions
-                var question = document.createElement('p');
-                //Place the question from the array in its <p> tag
-                question.innerHTML = questions[i].question;
-                //Append the <p> tag with the question held in the tag
-                 $("#quizz").append(question);
-                    //Iterating the options array
-                    for (var j=0; j < 5; j++) {
-                        //Create an input radio to choose one single option and append to "quizz" div
-                        var input = document.createElement('input');
-                        $("#quizz").append('<input type="radio" name="trivia'+[i]+'" value='+questions[i].options[j]+'>'+questions[i].options[j]);
-                    }
-            }
-            //Change buttons    
-            $('button').hide();
-            btn2 = document.createElement('button');
-            btn2.setAttribute('id', 'done');
-            btn2.innerHTML = "Done";
-            $('#button2-container').append(btn2);
-});
-
+const createStart = () => {
+    //Create a button START
+    btnStart = document.createElement('button')
+    btnStart.setAttribute("id", 'start-btn');
+    //Show button on screen
+    btnStart.innerHTML = "START";
+    $("#btn-start-container").append(btnStart);
+    //Add event listener "CLICK" to the button and run a function
+    btnStart.addEventListener ('click', start)    
 }
 
-//Click button "done" to compare guest choice and correct answerand show the results (correct, incorrect and unanswered)
-var x = $('#button2-container').on('click', function() {
-    for (var i = 0; i < questions.length; i++) {
+let start = () => {
+    // $('#start-over-btn').hide();
+    $('#results').empty();
+    $('#btn-startover-container').empty();
+    $('#your-score', "#correct", "#incorrect", "unanswered").remove();
+    console.log("REMOVE")
+    time = 20;
+    correct = 0;
+    incorrect = 0;
+    unanswered = 0;
+    answered = 0;
+    //Start the timer
+    // intervalId = setInterval(countDown, 1000);
+    //Through the array, for each object
+    options.forEach((option, index) => {
+        const pack = document.createElement('div')
+        pack.setAttribute("id", "pack" + options.indexOf(option))
+        pack.setAttribute("class", "pack")
+        console.log("option index = " + options.indexOf(option))
+        const questionVariable = document.createElement('h5')
+        questionVariable.setAttribute("class", "each-question")
+        questionVariable.innerHTML = option.question;
+        console.log(questionVariable)
+        pack.append(questionVariable)
+        console.log(pack)
+        console.log(option.choices)
+        option.choices.forEach((choice) => {
+            choiceVariable = document.createElement('button')
+            choiceVariable.setAttribute("value", choice)
+            choiceVariable.setAttribute('id', choice.replace(/\s/g,'').toLowerCase())
+            choiceVariable.setAttribute("class", "btn btn-dark btn-choices")
+            choiceVariable.setAttribute("name", choice)
+            console.log(choice)
+            choiceVariable.setAttribute("display", "inline-block")
+            choiceVariable.innerHTML = choice;
+            console.log(choiceVariable);
+            pack.append(choiceVariable)
+            document.querySelector("#quizz").append(pack)
+            choiceVariable.addEventListener("click", choosingAnswer)
+        })
 
-        if ($('input:radio[name="trivia' + [i]+ '"]:checked').val() == questions[i].answer) {
-            correct++;
+        function choosingAnswer() {
+                if (this.value === option.answer) {
+                    correct++
+                    this.classList.add("btn-right")
+                    console.log("option.answer = " + option.answer)
+                    console.log("this.value = " + this.value)
+                    console.log(correct)
+                    console.log("correct worked")
+                    answered++;
+                    console.log("OPTIONS LENGTH = " + options.length)
+                    console.log("ANSWERED = " + answered)
+                    unanswered = options.length - answered;   
         
-        } else if ($('input:radio[name="trivia' + [i]+ '"]:checked').val() != questions[i].answer && $('input:radio[name="trivia' + [i]+ '"]:checked').val() != null ) {
-            incorrect++;
-
-        } else if ($('input:radio[name="trivia' + [i]+ '"]:checked').val() == null) {
-            unanswered++;
+                } else if (this.value !== option.answer) {
+                    incorrect++
+                    setTimeout(()=> this.classList.add("btn-wrong"), 500)
+                    option.choices.forEach(choice => { setTimeout(function() {
+                            document.querySelector('#' + option.answer.replace(/\s/g,'').toLowerCase()).classList.add("btn-right")
+                            console.log("HERE" + option.answer.replace(/\s/g,'').toLowerCase())
+                    }, 1000)})
+                    console.log("option.answer = " + option.answer)
+                    console.log("this.value = " + this.value)
+                    console.log(incorrect)
+                    console.log("incorrect worked")
+                    answered++;
+                    console.log("OPTIONS LENGTH = " + options.length)
+                    console.log("ANSWERED = " + answered)
+                    unanswered = options.length - answered;   
+                }       
         }
-       console.log(correct);
-       console.log(incorrect);
-       console.log(unanswered);
-    }
-    results();
-  
-});
-console.log(correct);
+    })
 
-//This function is called every second and reduces time
-function countDown() {
+    //Change buttons    
+    $('#start-btn').hide();
+    btnDone = document.createElement('button');
+    btnDone.setAttribute('id', 'done-btn');
+    btnDone.innerHTML = "DONE";
+    $('#btn-done-container').append(btnDone);
+    btnDone.addEventListener("click", done)
+}; 
+
+//FUNCTION CALLED WHEN BUTTON DONE IS CLICKED
+const done = () => {
+stopClock();
+console.log(time)
+results();
+}
+
+//FUNCTION CALLED EVERY SECOND DESCREASING TIME 
+const countDown = () => {
     time--;
-    var converted = timeConverter(time);
-    $('#clock').text(converted);
-
-    if (time === 0) {
+    let timeConverted = timeConverter(time);
+    $("#clock").text(timeConverted);
+    if (time <= 0) {
         stopClock();
-        guest();
         results();
-  
-}
-}
-//Convert time in minutes, seconds and determine how time will be displayed
-function timeConverter(time) {
-
-var minutes = Math.floor(time/60);
-var seconds = time - (minutes*60);
-
-if (seconds < 10) {
-    seconds = "0" + seconds;
-}
-
-if (minutes === 0) {
-    minutes = "00";
-}
-
-else if (minutes < 10) {
-    minutes = "0" + minutes;
-}
-return minutes + ":" + seconds;
-}
-
-//function called when button "done" is clicked, compare user choices and correct answers and scores guest
-function guest() {
-    for (var i = 0; i < questions.length; i++) {
-
-        if ($('input:radio[name="trivia' + [i]+ '"]:checked').val() == questions[i].answer) {
-            correct++;
-        
-        } else if ($('input:radio[name="trivia' + [i]+ '"]:checked').val() != questions[i].answer && $('input:radio[name="trivia' + [i]+ '"]:checked').val() != null ) {
-            incorrect++;
-            
-        } else if ($('input:radio[name="trivia' + [i]+ '"]:checked').val() == null) {
-            unanswered++;
-        }
     }
 }
 
-//Stops setInterval method
-function stopClock() {
-        clearInterval(intervalId);
+//DISPLAY TIME
+const timeConverter =  time => {
+
+    let minutes = Math.floor(time/60);
+    let seconds = time - (minutes*60);
+
+    if (seconds < 10) {
+        seconds = "0" + seconds;
+    }
+
+    if (minutes === 0) {
+    minutes = "0";
+    } else if (minutes < 0) {
+        minutes = "0" + minutes
+    }
+    return minutes + ":" + seconds
 }
-//Display results
-function results() {
+
+//STOPS SETINVERVAL METHOD
+const stopClock = () => {
+    clearInterval(intervalId);
+}
+
+//DISPLAY RESULTS
+const results = () => {
     stopClock();
     $('#clock').empty();
-    $('form').empty();
-    $('#button2-container').empty();
-    $('#results').append('<h4>All Done!</h4><p>correct answers:<span id="correct"> '+correct+'</span></p><p>incorrect answers:<span id="incorrect"> '+incorrect+'</span></p><p>unanswered:<span id="unanswered"> '+unanswered+'</span></p>');
-
+    $("#quizz").empty();
+    $('#btn-done-container').empty();
+    $('#results').append(
+        `<h4 id="your-score">YOUR SCORE</h4>
+        <div class="scores container">
+        <div id="correct">
+        <div>Correct answers</div> <h4>${correct}</h4>
+        </div>
+        <div id="incorrect">
+        <div>Wrong answers</div> <h4>${incorrect}</h4>
+        </div>
+        <div id="unanswered">
+        <div>Unanswered</div> <h4>${unanswered}</h4>
+        </div>
+        </div>`);
+    createStartOver();
 }
+
+const createStartOver = () => {
+    //Create a button START
+    btnStartOver = document.createElement('button')
+    btnStartOver.setAttribute("id", 'start-over-btn');
+    //Show button on screen
+    btnStartOver.innerHTML = "START OVER";
+    $("#btn-startover-container").append(btnStartOver);
+    //Add event listener "CLICK" to the button and run a function
+    btnStartOver.addEventListener ('click', start)    
+}
+
+
+//function called when button "done" is clicked, compare user choices and correct answers and scores guest
+// function guest() {
+//     for (var i = 0; i < questions.length; i++) {
+
+//         if ($('input:radio[name="trivia' + [i]+ '"]:checked').val() == questions[i].answer) {
+//             correct++;
+        
+//         } else if ($('input:radio[name="trivia' + [i]+ '"]:checked').val() != questions[i].answer && $('input:radio[name="trivia' + [i]+ '"]:checked').val() != null ) {
+//             incorrect++;
+            
+//         } else if ($('input:radio[name="trivia' + [i]+ '"]:checked').val() == null) {
+//             unanswered++;
+//         }
+//     }
+// }
